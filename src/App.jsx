@@ -1,24 +1,17 @@
 import './App.css';
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import Button from './components/button';
+import Heading from './components/heading';
 
 function App() {
-  const [todos, setTodos] = useState([]);
-
-  useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/todos')
-      .then((response) => response.json())
-      .then((json) => setTodos(json));
-  }, []);
+  const [isHeadingVisible, setIsHeadingVisible] = useState(true);
 
   return (
     <>
-      {todos.map((todo) => (
-        <div key={todo.id}>
-          <h1>{todo.title}</h1>
-          <p>{todo.completed}</p>
-        </div>
-      ))}
+      {isHeadingVisible ? <Heading>React App</Heading> : null}
+      <Button onClick={() => setIsHeadingVisible(!isHeadingVisible)}>
+        Toggle Heading
+      </Button>
     </>
   );
 }

@@ -1,34 +1,25 @@
-import { render, screen } from '@testing-library/react';
-
+// Importing the jest testing library
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import App from './App';
 
-describe('App', () => {
-  let originalFetch;
+// afterEach function runs after each test suite is executed
+afterEach(() => {
+  cleanup(); // Resets the DOM after each test suite
+});
 
-  beforeEach(() => {
-    originalFetch = global.fetch;
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        json: () =>
-          Promise.resolve([
-            {
-              userId: 1,
-              id: 1,
-              title: 'Kaliteye hoşgeldiniz',
-              completed: false,
-            },
-          ]),
-      })
-    );
-  });
+describe('App Component', () => {
+  render(<App />);
+  const headingElement = screen.getByRole('heading');
+  const buttonElement = screen.getByRole('button');
 
-  afterEach(() => {
-    global.fetch = originalFetch;
-  });
-
-  it('renders App component', async () => {
-    render(<App />);
-    const linkElement = await screen.findByText(/Kaliteye hoşgeldiniz/i);
-    expect(linkElement).toBeInTheDocument();
+  // Test 1
+  test('Toggle Page Heading', () => {
+    expect(headingElement).toBeInTheDocument();
+    expect(buttonElement).toBeInTheDocument();
+    fireEvent.click(buttonElement);
+    expect(headingElement).not.toBeVisible();
+    fireEvent.click(buttonElement);
+    const newHeadingElement = screen.getByRole('heading');
+    expect(newHeadingElement).toBeVisible();
   });
 });
